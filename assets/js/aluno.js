@@ -1,4 +1,5 @@
-// aluno.js
+const alunoId = new URLSearchParams(window.location.search).get("id");
+
 $(document).ready(function () {
     $("#formAluno").submit(function (e) {
         e.preventDefault();
@@ -11,7 +12,7 @@ $(document).ready(function () {
                 if (response.status === "success") {
                     $("#msgStatus").html("<span class='text-success'>Aluno cadastrado com sucesso!</span>");
                     $("#formAluno")[0].reset();
-                    atualizarLista();
+                    window.location.href = "../views/index.php";
                 } else {
                     $("#msgStatus").html("<span class='text-danger'>Erro ao cadastrar aluno.</span>");
                 }
@@ -19,15 +20,16 @@ $(document).ready(function () {
         });
     });
 
+
     function carregarAlunos() {
         $.ajax({
             type: "GET",
             url: "../controllers/aluno_controller.php",
-            data: { action: "list" }, // Ação para listar os alunos
+            data: { action: "list" },
             dataType: "json",
             success: function (response) {
                 let tabela = $("#tabelaAlunos tbody");
-                tabela.empty(); // Limpar tabela antes de inserir novos dados
+                tabela.empty();
                 response.data.forEach(function (aluno) {
                     let linha = `<tr id="linha-${aluno.id}">
                                     <td>${aluno.id}</td>
@@ -69,5 +71,26 @@ $(document).ready(function () {
             });
         }
     });
-    
+
+    if (alunoId) {
+        $.ajax({
+            type: "GET",
+            url: "../controllers/aluno_controller.php",
+            data: { action: "getAluno", id: alunoId },
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    const aluno = response.data;
+                    $('#alunoId').val(aluno.id);
+                    $('#nome').val(aluno.nome);
+                    $('#email').val(aluno.email);
+                    $('#telefone').val(aluno.telefone);
+                    $('#data_nascimento').val(aluno.data_nascimento);
+                } else {
+                    $('#msgStatus').html("<span class='text-danger'>Aluno não encontrado</span>");
+                }
+            }
+        });
+    }
+
 });

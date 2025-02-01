@@ -1,5 +1,14 @@
+<?php
+include "../config/db.php";
+$query = "SELECT * FROM alunos WHERE ativo = TRUE ORDER BY id DESC";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$result = $stmt;
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +17,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../assets/js/aluno.js"></script>
 </head>
+
 <body class="container">
-    <h2 class="mt-4">Lista de Alunos</h2>
+    <div class="mb-3 d-flex justify-content-between align-items-center">
+        <h2 class="mt-4">Lista de Alunos</h2>
+        <a href="cadastro_aluno.php" class="btn btn-primary mt-4">Cadastrar Aluno</a>
+    </div>
+
     <table class="table table-striped" id="tabelaAlunos">
         <thead>
             <tr>
@@ -22,7 +36,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php while ($row = $result->fetch(PDO::FETCH_ASSOC)): ?>
+            <?php foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row): ?>
                 <tr id="linha-<?= $row["id"] ?>">
                     <td><?= $row["id"] ?></td>
                     <td><?= $row["nome"] ?></td>
@@ -34,8 +48,9 @@
                         <button class="btn btn-danger btn-sm btnExcluir" data-id="<?= $row["id"] ?>">Excluir</button>
                     </td>
                 </tr>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </body>
+
 </html>

@@ -17,9 +17,11 @@ if ($action === "create") {
     $stmt->bindParam(":data_nascimento", $data_nascimento);
 
     if ($stmt->execute()) {
-        echo json_encode(["status" => "success"]);
+        header("Location: ../views/index.php?status=created");
+        exit();
     } else {
         echo json_encode(["status" => "error"]);
+        exit();
     }
 } elseif ($action === "delete") {
     $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
@@ -37,11 +39,15 @@ if ($action === "create") {
     $query = "SELECT * FROM alunos WHERE ativo = TRUE ORDER BY id DESC";
     $result = $pdo->query($query);
 
-    $alunos = [];
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $alunos[] = $row;
+    if ($result) {
+        $alunos = [];
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            $alunos[] = $row;
+        }
+
+        echo json_encode(["data" => $alunos]);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Erro na consulta ao banco de dados"]);
     }
-
-    echo json_encode(["data" => $alunos]);
 }
-
+?>
