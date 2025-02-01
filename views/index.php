@@ -20,8 +20,6 @@ include "config/init_db.php";
     <div class="list-group">
         <a href="cadastro_aluno.php" class="list-group-item list-group-item-action">Cadastrar Aluno</a>
         <a href="lista_alunos.php" class="list-group-item list-group-item-action">Listar Alunos</a>
-        <a href="cadastro_curso.php" class="list-group-item list-group-item-action">Cadastrar Curso</a>
-        <a href="lista_cursos.php" class="list-group-item list-group-item-action">Listar Cursos</a>
     </div>
 </body>
 </html>
