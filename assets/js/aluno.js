@@ -1,6 +1,11 @@
 const alunoId = new URLSearchParams(window.location.search).get("id");
 
 $(document).ready(function () {
+    $(".btn-primary").click(function () {
+        var modal = new bootstrap.Modal(document.getElementById('modalCadastroAluno'));
+        modal.show();
+    });
+
     $("#formAluno").submit(function (e) {
         e.preventDefault();
         $.ajax({
@@ -11,15 +16,29 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.status === "success") {
                     $("#msgStatus").html("<span class='text-success'>Aluno cadastrado com sucesso!</span>");
-                    $("#formAluno")[0].reset();
-                    window.location.href = "../views/index.php";
+                    $("#formAluno")[0].reset(); // Usando o método correto para resetar o formulário
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('modalCadastroAluno'));
+                    modal.hide();
+                    // Limpando o fundo da tela após o modal fechar
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    carregarAlunos();
                 } else {
                     $("#msgStatus").html("<span class='text-danger'>Erro ao cadastrar aluno.</span>");
+                    modal.hide();
+                    // Limpando o fundo da tela após o modal fechar
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    carregarAlunos();
                 }
             }
         });
     });
 
+    $(document).on('hidden.bs.modal', '#modalCadastroAluno', function () {
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    });
 
     function carregarAlunos() {
         $.ajax({
