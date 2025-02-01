@@ -2,9 +2,9 @@
 include "../config/db.php";
 
 if (isset($_GET["id"])) {
-    $id = $_GET["id"];
+    $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
 
-    $sql = "DELETE FROM alunos WHERE id = :id";
+    $sql = "UPDATE alunos SET ativo = FALSE WHERE id = :id"; // Exclusão lógica
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(":id", $id);
 

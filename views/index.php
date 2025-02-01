@@ -1,7 +1,7 @@
 <?php
 // index.php
 include "config/db.php";
-
+include "config/init_db.php";
 // Você pode incluir uma lógica aqui para buscar a lista de alunos ou cursos, se necessário
 ?>
 
