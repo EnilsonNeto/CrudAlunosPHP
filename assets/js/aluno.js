@@ -68,7 +68,7 @@ $(document).ready(function () {
                                     <td>${telefoneFormatado}</td>
                                     <td>${dataFormatada}</td>
                                     <td>
-                                        <button class="btn btn-warning btn-sm btnEditar" data-id="${aluno.id}"><i class="fas fa-edit"></i> Editar</button>
+                                        <button class="btn btn-primary btn-sm btnEditar" data-id="${aluno.id}"><i class="fas fa-edit"></i> Editar</button>
                                         <button class="btn btn-danger btn-sm btnExcluir" data-id="${aluno.id}"><i class="fas fa-trash"></i> Excluir</button>
                                     </td>
                                 </tr>`;
@@ -97,6 +97,8 @@ $(document).ready(function () {
     $(document).off("click", ".btnExcluir");
     $(document).on("click", ".btnExcluir", function () {
         let id = $(this).data("id");
+        console.log(id);
+        
         if (confirm("Tem certeza que deseja excluir este aluno?")) {
             $.ajax({
                 type: "GET",
@@ -107,10 +109,11 @@ $(document).ready(function () {
                 },
                 dataType: "json",
                 success: function (response) {
-                    if (response.status === "deleted") {
+                    if (response.status === "success") {
                         $("#linha-" + id).fadeOut();
                         carregarAlunos();
                     } else {
+                        carregarAlunos();
                         alert("Erro ao excluir aluno.");
                     }
                 }
