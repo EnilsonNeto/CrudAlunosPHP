@@ -2,7 +2,7 @@
 $host = "localhost";
 $dbname = "crud_php";
 $user = "postgres";
-$password = "20062003";
+$password = "root";
 
 try {
     $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);

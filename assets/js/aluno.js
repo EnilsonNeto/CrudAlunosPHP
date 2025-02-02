@@ -1,11 +1,4 @@
-const alunoId = new URLSearchParams(window.location.search).get("id");
-
 $(document).ready(function () {
-    $(".btn-primary").click(function () {
-        var modal = new bootstrap.Modal(document.getElementById('modalCadastroAluno'));
-        modal.show();
-    });
-
     $("#formAluno").submit(function (e) {
         e.preventDefault();
         $.ajax({
@@ -16,28 +9,22 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.status === "success") {
                     $("#msgStatus").html("<span class='text-success'>Aluno cadastrado com sucesso!</span>");
-                    $("#formAluno")[0].reset(); // Usando o método correto para resetar o formulário
+                    $("#formAluno")[0].reset();
                     var modal = bootstrap.Modal.getInstance(document.getElementById('modalCadastroAluno'));
+                    console.log(modal);
                     modal.hide();
-                    // Limpando o fundo da tela após o modal fechar
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
                     carregarAlunos();
                 } else {
                     $("#msgStatus").html("<span class='text-danger'>Erro ao cadastrar aluno.</span>");
                     modal.hide();
-                    // Limpando o fundo da tela após o modal fechar
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
                     carregarAlunos();
                 }
             }
         });
-    });
-
-    $(document).on('hidden.bs.modal', '#modalCadastroAluno', function () {
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
     });
 
     function carregarAlunos() {
@@ -57,7 +44,7 @@ $(document).ready(function () {
                                     <td>${aluno.telefone}</td>
                                     <td>${aluno.data_nascimento}</td>
                                     <td>
-                                        <a href="editar_aluno.php?id=${aluno.id}" class="btn btn-warning btn-sm">Editar</a>
+                                        <button class="btn btn-warning btn-sm btnEditar" data-id="${aluno.id}" data-bs-target="#modalEditarAluno">Editar</button>                                        
                                         <button class="btn btn-danger btn-sm btnExcluir" data-id="${aluno.id}">Excluir</button>
                                     </td>
                                   </tr>`;
@@ -91,25 +78,74 @@ $(document).ready(function () {
         }
     });
 
-    if (alunoId) {
+    $(document).on("click", ".btnEditar", function () {
+        let alunoId = $(this).data("id"); // Pega o ID do aluno ao clicar no botão
+
+        if (alunoId) {
+            console.log("ID do aluno:", alunoId); // Verifica se está pegando o ID corretamente
+
+            $.ajax({
+                type: "GET",
+                url: "../controllers/editar_aluno_controller.php",
+                data: { id: alunoId },
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+
+                    if (response) {
+                        $('#alunoId').val(response.id);
+                        $('#nome').val(response.nome);
+                        $('#email').val(response.email);
+                        $('#telefone').val(response.telefone);
+                        $('#data_nascimento').val(response.data_nascimento);
+                        $('#ativo').val(response.ativo);
+                        var modal = new bootstrap.Modal(document.getElementById('modalEditarAluno'));
+                        modal.show();
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                    } else {
+                        alert("Aluno não encontrado!");
+                    }
+                },
+                error: function () {
+                    alert("Erro ao buscar os dados do aluno.");
+                }
+            });
+        } else {
+            alert("Erro: ID do aluno não encontrado.");
+        }
+    });
+
+
+    $("#formEditarAluno").submit(function (e) {
+        e.preventDefault();
         $.ajax({
-            type: "GET",
-            url: "../controllers/aluno_controller.php",
-            data: { action: "getAluno", id: alunoId },
+            type: "POST",
+            url: "../controllers/editar_aluno_controller.php",
+            data: $(this).serialize(),
             dataType: "json",
             success: function (response) {
                 if (response.status === "success") {
-                    const aluno = response.data;
-                    $('#alunoId').val(aluno.id);
-                    $('#nome').val(aluno.nome);
-                    $('#email').val(aluno.email);
-                    $('#telefone').val(aluno.telefone);
-                    $('#data_nascimento').val(aluno.data_nascimento);
+                    alert("Aluno atualizado com sucesso!");
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('#modalEditarAluno'));
+                    console.log(modal);
+
+                    modal.hide();
+                    carregarAlunos();
                 } else {
-                    $('#msgStatus').html("<span class='text-danger'>Aluno não encontrado</span>");
+                    alert("Erro ao atualizar aluno.");
                 }
+            },
+            error: function () {
+                alert("Erro ao atualizar aluno.");
             }
         });
-    }
+    });
+
+    $(document).on('hidden.bs.modal', '#modalCadastroAluno', '#modalEditarAluno', function () {
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    });
 
 });
+

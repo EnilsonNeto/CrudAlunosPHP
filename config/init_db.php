@@ -18,7 +18,7 @@ try {
         echo "Banco de dados '$dbname' criado com sucesso.<br>";
 
         // Agora que o banco de dados está criado, se reconectar no novo banco
-        $pdo = new PDO("pgsql:host=localhost;dbname=$dbname", "postgres", "20062003");
+        $pdo = new PDO("pgsql:host=localhost;dbname=$dbname", "postgres", "root");
     }
 
     // Criação das tabelas
@@ -29,20 +29,7 @@ try {
         email VARCHAR(255) UNIQUE NOT NULL,
         telefone VARCHAR(20),
         data_nascimento DATE
-    );
-
-    CREATE TABLE IF NOT EXISTS cursos (
-        id SERIAL PRIMARY KEY,
-        nome VARCHAR(255) NOT NULL,
-        descricao TEXT,
-        carga_horaria INT
-    );
-
-    CREATE TABLE IF NOT EXISTS matriculas (
-        id SERIAL PRIMARY KEY,
-        aluno_id INT REFERENCES alunos(id),
-        curso_id INT REFERENCES cursos(id),
-        data_matricula DATE DEFAULT CURRENT_DATE
+        ativo BOOLEAN DEFAULT TRUE
     );
     ";
 
