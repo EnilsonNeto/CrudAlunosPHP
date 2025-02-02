@@ -112,8 +112,7 @@ $(document).ready(function () {
                         $('#ativo').val(response.ativo);
                         var modal = new bootstrap.Modal(document.getElementById('modalEditarAluno'));
                         modal.show();
-                        $('body').removeClass('modal-open');
-                        $('.modal-backdrop').remove();
+
                         carregarAlunos();
                     } else {
                         alert("Aluno não encontrado!");
