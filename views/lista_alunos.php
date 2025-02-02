@@ -45,7 +45,7 @@ $result = $stmt;
                     <td><?= $row["telefone"] ?></td>
                     <td><?= $row["data_nascimento"] ?></td>
                     <td>
-                    <button class="btn btn-warning btn-sm btnEditar" data-bs-toggle="modal" data-bs-target="#modalEditarAluno" data-id="<?= $row["id"] ?>">Editar</button>                        
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-id="<?= $row["id"] ?>">Editar</button>                        
                     <button class="btn btn-danger btn-sm btnExcluir" data-id="<?= $row["id"] ?>">Excluir</button>
                     </td>
                 </tr>

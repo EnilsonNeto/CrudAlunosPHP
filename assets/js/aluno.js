@@ -78,12 +78,11 @@ $(document).ready(function () {
         }
     });
 
+    $(document).off("click", ".btnEditar");
     $(document).on("click", ".btnEditar", function () {
-        let alunoId = $(this).data("id"); // Pega o ID do aluno ao clicar no botão
-
+        let alunoId = $(this).data("id");
         if (alunoId) {
-            console.log("ID do aluno:", alunoId); // Verifica se está pegando o ID corretamente
-
+            console.log("ID do aluno:", alunoId);
             $.ajax({
                 type: "GET",
                 url: "../controllers/editar_aluno_controller.php",
@@ -91,7 +90,6 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (response) {
                     console.log(response);
-
                     if (response) {
                         $('#alunoId').val(response.id);
                         $('#nome').val(response.nome);
@@ -103,6 +101,7 @@ $(document).ready(function () {
                         modal.show();
                         $('body').removeClass('modal-open');
                         $('.modal-backdrop').remove();
+                        carregarAlunos();
                     } else {
                         alert("Aluno não encontrado!");
                     }
@@ -117,34 +116,51 @@ $(document).ready(function () {
     });
 
 
-    $("#formEditarAluno").submit(function (e) {
+    $("#formEditarAluno").off("submit");
+    $("#formEditarAluno").on("submit", function (e) {
         e.preventDefault();
+        console.log("Iniciando atualização...");
+        
         $.ajax({
             type: "POST",
             url: "../controllers/editar_aluno_controller.php",
             data: $(this).serialize(),
             dataType: "json",
             success: function (response) {
+                console.log("Resposta do servidor:", response);
+                
                 if (response.status === "success") {
+                    console.log("Sucesso! Mostrando alerta...");
                     alert("Aluno atualizado com sucesso!");
-                    var modal = bootstrap.Modal.getInstance(document.getElementById('#modalEditarAluno'));
-                    console.log(modal);
-
+                    
+                    const modalElement = document.getElementById('modalEditarAluno');
+                    if (!modalElement) {
+                        console.error("Modal não encontrado!");
+                        return;
+                    }
+                    
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    if (!modal) {
+                        console.error("Instância do modal não encontrada!");
+                        return;
+                    }
+                    
+                    console.log("Tentando fechar modal...");
                     modal.hide();
+                    console.log("Modal fechado com sucesso!");
+                    
                     carregarAlunos();
                 } else {
-                    alert("Erro ao atualizar aluno.");
+                    console.log("Erro na atualização:", response);
                 }
             },
-            error: function () {
-                alert("Erro ao atualizar aluno.");
-            }
         });
     });
 
     $(document).on('hidden.bs.modal', '#modalCadastroAluno', '#modalEditarAluno', function () {
         $('body').removeClass('modal-open');
         $('.modal-backdrop').remove();
+        carregarAlunos();
     });
 
 });

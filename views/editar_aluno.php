@@ -19,7 +19,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
         </div>
         <div class="modal-body">
-          <form id="formEditarAluno" action="../controllers/editar_aluno_controller.php" method="POST">
+          <form id="formEditarAluno">
             <input type="hidden" id="alunoId" name="id">
             <input type="hidden" name="ativo" id="ativo">
             <div class="mb-3">
