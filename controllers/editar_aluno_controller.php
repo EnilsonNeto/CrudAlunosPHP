@@ -36,10 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(":ativo", $ativo);
 
     if ($stmt->execute()) {
-        header("Location: ../views/index.php?status=updated");
-        exit();
+        echo json_encode(["status" => "success"]);
     } else {
         echo json_encode(["status" => "error"]);
-        exit();
     }
 }

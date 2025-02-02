@@ -1,31 +1,53 @@
 $(document).ready(function () {
-    $("#formAluno").submit(function (e) {
-        e.preventDefault();
+    $(document).off("submit", "#formAluno");
+    $(document).on("submit", "#formAluno", function (event) {
+        event.preventDefault(); 
+    
         $.ajax({
             type: "POST",
             url: "../controllers/aluno_controller.php",
             data: $(this).serialize(),
             dataType: "json",
             success: function (response) {
+                console.log("Resposta recebida:", response);  
                 if (response.status === "success") {
                     $("#msgStatus").html("<span class='text-success'>Aluno cadastrado com sucesso!</span>");
-                    $("#formAluno")[0].reset();
+                    $("#formAluno")[0].reset(); 
+        
+                    // Fecha o modal
                     var modal = bootstrap.Modal.getInstance(document.getElementById('modalCadastroAluno'));
-                    console.log(modal);
-                    modal.hide();
+                    if (modal) {
+                        modal.hide();
+                    }
+        
+                    // Remove a classe e backdrop
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
+        
+                    // Atualiza a lista de alunos
                     carregarAlunos();
                 } else {
                     $("#msgStatus").html("<span class='text-danger'>Erro ao cadastrar aluno.</span>");
-                    modal.hide();
+                    // Fecha o modal em caso de erro também
+                    if (modal) {
+                        modal.hide();
+                    }
+        
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
+        
+                    // Atualiza a lista de alunos
                     carregarAlunos();
                 }
+            },
+            error: function(xhr, status, error) {
+                console.log("Erro na requisição:", xhr.responseText);  // Exibe o erro da requisição
             }
         });
+        
     });
+    
+    
 
     function carregarAlunos() {
         $.ajax({
@@ -56,6 +78,8 @@ $(document).ready(function () {
 
     carregarAlunos();
 
+    
+    $(document).off("click", ".btnExcluir");
     $(document).on("click", ".btnExcluir", function () {
         let id = $(this).data("id");
         if (confirm("Tem certeza que deseja excluir este aluno?")) {
@@ -130,9 +154,6 @@ $(document).ready(function () {
                 console.log("Resposta do servidor:", response);
                 
                 if (response.status === "success") {
-                    console.log("Sucesso! Mostrando alerta...");
-                    alert("Aluno atualizado com sucesso!");
-                    
                     const modalElement = document.getElementById('modalEditarAluno');
                     if (!modalElement) {
                         console.error("Modal não encontrado!");
@@ -145,22 +166,13 @@ $(document).ready(function () {
                         return;
                     }
                     
-                    console.log("Tentando fechar modal...");
-                    modal.hide();
-                    console.log("Modal fechado com sucesso!");
-                    
+                    modal.hide();           
                     carregarAlunos();
                 } else {
                     console.log("Erro na atualização:", response);
                 }
             },
         });
-    });
-
-    $(document).on('hidden.bs.modal', '#modalCadastroAluno', '#modalEditarAluno', function () {
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-        carregarAlunos();
     });
 
 });
