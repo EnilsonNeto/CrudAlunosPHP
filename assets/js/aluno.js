@@ -54,7 +54,7 @@ $(document).ready(function () {
                 let tabela = $("#tabelaAlunos tbody");
                 tabela.empty();
                 if (response.data.length === 0) {
-                    tabela.append('<tr><td colspan="6" class="text-center text-muted">Nenhum aluno cadastrado ou nenhum aluno com o campo "ativo" como TRUE.</td></tr>');
+                    tabela.append('<tr><td colspan="6" class="text-center text-muted">Ainda não há alunos cadastrados. Que tal começar agora?</td></tr>');
                 } else {
                     response.data.forEach(function (aluno) {
                         let telefoneFormatado = formatarTelefone(aluno.telefone);
@@ -62,7 +62,6 @@ $(document).ready(function () {
 
                         let linha = `
                          <tr class="text-center" id="linha-${aluno.id}">
-                             <td>${aluno.id}</td>
                              <td>${aluno.nome}</td>
                              <td>${aluno.email}</td>
                              <td>${telefoneFormatado}</td>

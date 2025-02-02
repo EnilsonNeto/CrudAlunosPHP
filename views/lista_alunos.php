@@ -34,10 +34,9 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Buscar os dados como array assoc
         <table class="table table-striped text-center" id="tabelaAlunos">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
+                    <th>Aluno</th>
                     <th>Email</th>
-                    <th>Telefone</th>
+                    <th>Nº Telefone</th>
                     <th>Data de Nascimento</th>
                     <th>Ações</th>
                 </tr>
@@ -45,12 +44,11 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Buscar os dados como array assoc
             <tbody>
                 <?php if (empty($result)): ?>
                     <tr>
-                        <td colspan="6" class="text-center text-muted">Você ainda não possue alunos cadastrados!</td>
+                        <td colspan="6" class="text-center text-muted">Ainda não há alunos cadastrados. Que tal começar agora?</td>
                     </tr>
                 <?php else: ?>
                     <?php foreach ($result as $row): ?>
                         <tr id="linha-<?= $row["id"] ?>">
-                            <td><?= $row["id"] ?></td>
                             <td><?= $row["nome"] ?></td>
                             <td><?= $row["email"] ?></td>
                             <td><?= $row["telefone"] ?></td>

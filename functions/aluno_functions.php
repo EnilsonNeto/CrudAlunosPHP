@@ -13,13 +13,18 @@ function checkEmail($email) {
 
 function createOrUpdateAluno($nome, $email, $telefone, $data_nascimento, $id = null) {
     global $pdo;
-
     $alunoExistente = checkEmail($email);
+    
     if ($alunoExistente) {
         if ($alunoExistente['ativo'] === 'TRUE') {
-            return ["status" => "error", "message" => "Já existe um aluno com esse e-mail ativo."];
+            if ($alunoExistente['nome'] === $nome) {
+                return ["status" => "error", "message" => "Já existe um aluno com esse nome e e-mail ativo."];
+            } else {
+                $sql = "UPDATE alunos SET nome = :nome, telefone = :telefone, data_nascimento = :data_nascimento, ativo = TRUE WHERE email = :email";
+            }
+        } else {
+            $sql = "UPDATE alunos SET nome = :nome, telefone = :telefone, data_nascimento = :data_nascimento, ativo = TRUE WHERE email = :email";
         }
-        $sql = "UPDATE alunos SET nome = :nome, telefone = :telefone, data_nascimento = :data_nascimento, ativo = TRUE WHERE email = :email";
     } else {
         $sql = "INSERT INTO alunos (nome, email, telefone, data_nascimento, ativo) VALUES (:nome, :email, :telefone, :data_nascimento, TRUE)";
     }
@@ -36,6 +41,7 @@ function createOrUpdateAluno($nome, $email, $telefone, $data_nascimento, $id = n
         return ["status" => "error"];
     }
 }
+
 
 function deleteAluno($id) {
     global $pdo;
