@@ -20,6 +20,7 @@
         <p class="text-center mb-4">
             O Sistema de Gestão Escolar foi desenvolvido para otimizar a administração de alunos em instituições de ensino. Ele oferece uma interface simples e funcional, permitindo que os gestores cadastrem, editem e excluam informações dos alunos de maneira rápida e eficiente.
         </p>
+        <hr>
         <?php include "lista_alunos.php"; ?>
     </div>
 

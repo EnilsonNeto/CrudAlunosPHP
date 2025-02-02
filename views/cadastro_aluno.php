@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../assets/js/aluno.js"></script>
+    <link rel="stylesheet" href="../assets/styles/styles.css">
 </head>
 
 <body class="container">
@@ -37,8 +38,10 @@
                             <label class="form-label">Data de Nascimento</label>
                             <input type="date" name="data_nascimento" class="form-control">
                         </div>
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
-                        <p id="msgStatus"></p>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        </div>
                     </form>
                 </div>
             </div>
