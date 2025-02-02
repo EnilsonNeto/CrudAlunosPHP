@@ -97,8 +97,6 @@ $(document).ready(function () {
     $(document).off("click", ".btnExcluir");
     $(document).on("click", ".btnExcluir", function () {
         let id = $(this).data("id");
-        console.log(id);
-        
         if (confirm("Tem certeza que deseja excluir este aluno?")) {
             $.ajax({
                 type: "GET",
