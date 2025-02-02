@@ -26,11 +26,13 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Buscar os dados como array assoc
 
 <body>
     <div class="container">
+        <h2 class="text-center">Lista de Alunos</h2>
+        <p class="text-center">Abaixo você terá acesso a listagem e ações sobre os alunos, ultilize o buscar alunos caso deseja visualizar um aluno específico.</p>
         <div class="mb-3 d-flex justify-content-between align-items-center">
-            <h2>Lista de Alunos</h2>
+            <input type="text" id="searchInput" class="form-control" placeholder="Buscar aluno..." style="width: 250px;">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCadastroAluno"><i class="fa-solid fa-plus"></i> Cadastrar Novo Aluno</button>
         </div>
-
+        <hr>
         <table class="table table-striped text-center" id="tabelaAlunos">
             <thead>
                 <tr>

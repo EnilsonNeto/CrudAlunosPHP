@@ -8,7 +8,6 @@ $(document).ready(function () {
             data: $(this).serialize(),
             dataType: "json",
             success: function (response) {
-                console.log("Resposta recebida:", response);
                 if (response.status === "success") {
                     $("#msgStatus").html("<span class='text-success'>Aluno cadastrado com sucesso!</span>");
                     $("#formAluno")[0].reset();
@@ -44,39 +43,54 @@ $(document).ready(function () {
         return partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : data;
     }
 
-    function carregarAlunos() {
+    function carregarAlunos(filtro = "") {
         $.ajax({
             type: "GET",
             url: "../controllers/aluno_controller.php",
-            data: { action: "list" },
+            data: { action: "list", search: filtro },
             dataType: "json",
             success: function (response) {
                 let tabela = $("#tabelaAlunos tbody");
                 tabela.empty();
-                if (response.data.length === 0) {
+                
+                if (response.data && response.data.length === 0) {
                     tabela.append('<tr><td colspan="6" class="text-center text-muted">Ainda não há alunos cadastrados. Que tal começar agora?</td></tr>');
                 } else {
-                    response.data.forEach(function (aluno) {
-                        let telefoneFormatado = formatarTelefone(aluno.telefone);
-                        let dataFormatada = formatarData(aluno.data_nascimento);
-
-                        let linha = `
-                         <tr class="text-center" id="linha-${aluno.id}">
-                             <td>${aluno.nome}</td>
-                             <td>${aluno.email}</td>
-                             <td>${telefoneFormatado}</td>
-                             <td>${dataFormatada}</td>
-                             <td>
-                                 <button class="btn btn-warning btn-sm btnEditar" data-id="${aluno.id}"><i class="fas fa-edit"></i> Editar</button>
-                                 <button class="btn btn-danger btn-sm btnExcluir" data-id="${aluno.id}"><i class="fas fa-trash"></i> Excluir</button>
-                             </td>
-                         </tr>`;
-                        tabela.append(linha);
-                    });
+                    if (response.data && response.data.length > 0) {
+                        response.data.forEach(function (aluno) {
+                            let telefoneFormatado = formatarTelefone(aluno.telefone);
+                            let dataFormatada = formatarData(aluno.data_nascimento);
+           
+                            let linha = ` 
+                                <tr class="text-center" id="linha-${aluno.id}">
+                                    <td>${aluno.nome}</td>
+                                    <td>${aluno.email}</td>
+                                    <td>${telefoneFormatado}</td>
+                                    <td>${dataFormatada}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm btnEditar" data-id="${aluno.id}"><i class="fas fa-edit"></i> Editar</button>
+                                        <button class="btn btn-danger btn-sm btnExcluir" data-id="${aluno.id}"><i class="fas fa-trash"></i> Excluir</button>
+                                    </td>
+                                </tr>`;
+                            tabela.append(linha);
+                        });
+                    } else {
+                        tabela.append('<tr><td colspan="6" class="text-center text-muted">Nenhum aluno encontrado.</td></tr>');
+                    }
                 }
+            },
+            error: function (xhr, status, error) {
+                console.log("Status da requisição:", status);
+
             }
         });
     }
+    
+
+    $("#searchInput").on("input", function () {
+        let filtro = $(this).val(); 
+        carregarAlunos(filtro); 
+    });
 
     carregarAlunos();
 
@@ -108,7 +122,6 @@ $(document).ready(function () {
     $(document).on("click", ".btnEditar", function () {
         let alunoId = $(this).data("id");
         if (alunoId) {
-            console.log("ID do aluno:", alunoId);
             $.ajax({
                 type: "GET",
                 url: "../controllers/editar_aluno_controller.php",
@@ -143,16 +156,12 @@ $(document).ready(function () {
     $("#formEditarAluno").off("submit");
     $("#formEditarAluno").on("submit", function (e) {
         e.preventDefault();
-        console.log("Iniciando atualização...");
-
         $.ajax({
             type: "POST",
             url: "../controllers/editar_aluno_controller.php",
             data: $(this).serialize(),
             dataType: "json",
             success: function (response) {
-                console.log("Resposta do servidor:", response);
-
                 if (response.status === "success") {
                     const modalElement = document.getElementById('modalEditarAluno');
                     if (!modalElement) {
