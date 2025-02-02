@@ -1,13 +1,13 @@
 <?php
-include "../config/db.php";
-include "../views/cadastro_aluno.php";
-include "../views/editar_aluno.php";
+include(__DIR__ . '/../config/db.php');
+include(__DIR__ . '/cadastro_aluno.php');
+include(__DIR__ . '/editar_aluno.php');
 
-// Consulta para buscar alunos com o campo 'ativo' como TRUE
+
 $query = "SELECT * FROM alunos WHERE ativo = TRUE ORDER BY id DESC";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Buscar os dados como array associativo
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
