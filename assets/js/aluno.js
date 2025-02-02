@@ -13,35 +13,24 @@ $(document).ready(function () {
                 if (response.status === "success") {
                     $("#msgStatus").html("<span class='text-success'>Aluno cadastrado com sucesso!</span>");
                     $("#formAluno")[0].reset(); 
-        
-                    // Fecha o modal
+
                     var modal = bootstrap.Modal.getInstance(document.getElementById('modalCadastroAluno'));
                     if (modal) {
                         modal.hide();
                     }
-        
-                    // Remove a classe e backdrop
-                    $('body').removeClass('modal-open');
-                    $('.modal-backdrop').remove();
-        
-                    // Atualiza a lista de alunos
+    
                     carregarAlunos();
                 } else {
                     $("#msgStatus").html("<span class='text-danger'>Erro ao cadastrar aluno.</span>");
-                    // Fecha o modal em caso de erro também
                     if (modal) {
                         modal.hide();
                     }
-        
-                    $('body').removeClass('modal-open');
-                    $('.modal-backdrop').remove();
-        
-                    // Atualiza a lista de alunos
+                    
                     carregarAlunos();
                 }
             },
             error: function(xhr, status, error) {
-                console.log("Erro na requisição:", xhr.responseText);  // Exibe o erro da requisição
+                console.log("Erro na requisição:", xhr.responseText); 
             }
         });
         
